@@ -74,7 +74,6 @@ Once built, examples can be run from the bin directory. The list of available co
  --help: Show help
  -h, --height: Set window height
  -bt, --benchframetimes: Save frame times to benchmark results file
- -s, --shaders: Select shader type to use (glsl or hlsl)
  -b, --benchmark: Run example in benchmark mode
  -g, --gpu: Select GPU to run on
  -bf, --benchfilename: Set file name for benchmark results
@@ -86,7 +85,7 @@ Note that some examples require specific device features, and if you are on a mu
 
 ## Shaders
 
-Vulkan consumes shaders in an intermediate representation called SPIR-V. This makes it possible to use different shader languages by compiling them to that bytecode format. The primary shader language used here is [GLSL](shaders/glsl) but most samples also come with [HLSL](shaders/hlsl) shader sources.
+Vulkan consumes shaders in an intermediate representation called SPIR-V. This makes it possible to use different shader languages by compiling them to that bytecode format. The primary shader language used here is [GLSL](shaders/glsl).
 
 ## A note on synchronization
 

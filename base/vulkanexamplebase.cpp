@@ -796,7 +796,6 @@ VulkanExampleBase::VulkanExampleBase()
 	commandLineParser.add("fullscreen", { "-f", "--fullscreen" }, 0, "Start in fullscreen mode");
 	commandLineParser.add("width", { "-w", "--width" }, 1, "Set window width");
 	commandLineParser.add("height", { "-h", "--height" }, 1, "Set window height");
-	commandLineParser.add("shaders", { "-s", "--shaders" }, 1, "Select shader type to use (glsl or hlsl)");
 	commandLineParser.add("gpuselection", { "-g", "--gpu" }, 1, "Select GPU to run on");
 	commandLineParser.add("gpulist", { "-gl", "--listgpus" }, 0, "Display a list of available Vulkan devices");
 	commandLineParser.add("benchmark", { "-b", "--benchmark" }, 0, "Run example in benchmark mode");
@@ -829,15 +828,6 @@ VulkanExampleBase::VulkanExampleBase()
 	}
 	if (commandLineParser.isSet("fullscreen")) {
 		settings.fullscreen = true;
-	}
-	if (commandLineParser.isSet("shaders")) {
-		std::string value = commandLineParser.getValueAsString("shaders", "glsl");
-		if ((value != "glsl") && (value != "hlsl")) {
-			std::cerr << "Shader type must be one of 'glsl' or 'hlsl'\n";
-		}
-		else {
-			shaderDir = value;
-		}
 	}
 	if (commandLineParser.isSet("benchmark")) {
 		benchmark.active = true;
