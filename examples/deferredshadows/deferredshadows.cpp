@@ -195,14 +195,8 @@ public:
 		frameBuffers.shadow = new vks::Framebuffer(vulkanDevice);
 
 		// Shadowmap properties
-#if defined(__ANDROID__)
-		// Use smaller shadow maps on mobile due to performance reasons
-		frameBuffers.shadow->width = 1024;
-		frameBuffers.shadow->height = 1024;
-#else
 		frameBuffers.shadow->width = 2048;
 		frameBuffers.shadow->height = 2048;
-#endif
 
 		// Find a suitable depth format
 		VkFormat shadowMapFormat;
