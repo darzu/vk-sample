@@ -33,3 +33,8 @@ cmake .
 cmake --build .
 ./bin/Debug/deferredshadows.exe
 ```
+
+or one-line clean-run-clean
+```
+git clean -dfX && cmake . && cmake --build . && ./bin/Debug/deferredshadows.exe && git clean -dfX
+```
