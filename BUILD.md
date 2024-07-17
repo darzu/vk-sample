@@ -20,3 +20,16 @@ Use the provided CMakeLists.txt with [CMake](https://cmake.org) to generate a bu
 cmake -G "Visual Studio 16 2019" -A x64
 ```
 
+or to build from commmand line:
+```
+cmake .
+cmake --build .
+```
+
+full clean rebuild everything and run (from Git Bash):
+```
+git clean -dfX
+cmake .
+cmake --build .
+./bin/Debug/deferredshadows.exe
+```

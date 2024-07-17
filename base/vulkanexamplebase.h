@@ -213,8 +213,8 @@ public:
 
 	Camera camera;
 
-	std::string title = "Vulkan Example";
-	std::string name = "vulkanExample";
+	std::string title = "DZ VK";
+	std::string name = "dzVk";
 	uint32_t apiVersion = VK_API_VERSION_1_0;
 
 	/** @brief Default depth stencil attachment used by the default render pass */
