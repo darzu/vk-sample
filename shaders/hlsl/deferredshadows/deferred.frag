@@ -97,7 +97,8 @@ float4 main([[vk::location(0)]] float2 inUV : TEXCOORD0) : SV_TARGET
 	// Get G-Buffer values
 	float3 fragPos = textureposition.Sample(samplerposition, inUV).rgb;
 	float3 normal = textureNormal.Sample(samplerNormal, inUV).rgb;
-	float4 albedo = textureAlbedo.Sample(samplerAlbedo, inUV);
+	// float4 albedo = textureAlbedo.Sample(samplerAlbedo, inUV);
+	float4 albedo2 = float4(0.0,1.0,0.0,1.0);
 
 	float3 fragcolor;
 

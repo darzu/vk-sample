@@ -86,13 +86,6 @@ endfunction(buildExamples)
 set(EXAMPLES
 	bloom
 	bufferdeviceaddress
-	computecloth
-	computecullandlod
-	computeheadless
-	computenbody
-	computeparticles
-	computeraytracing
-	computeshader
 	conditionalrender
 	conservativeraster
 	debugprintf

@@ -92,7 +92,8 @@ void main()
 	// Get G-Buffer values
 	vec3 fragPos = texture(samplerposition, inUV).rgb;
 	vec3 normal = texture(samplerNormal, inUV).rgb;
-	vec4 albedo = texture(samplerAlbedo, inUV);
+	// vec4 albedo = texture(samplerAlbedo, inUV);
+	vec4 albedo2 = vec4(0.0,1.0,0.0,1.0);
 
 	// Debug display
 	if (ubo.debugDisplayTarget > 0) {
