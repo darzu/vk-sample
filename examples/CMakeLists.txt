@@ -8,40 +8,23 @@ function(buildExample EXAMPLE_NAME)
 	# Main
 	file(GLOB SOURCE *.cpp ${BASE_HEADERS} ${EXAMPLE_FOLDER}/*.cpp)
 	SET(MAIN_CPP ${EXAMPLE_FOLDER}/${EXAMPLE_NAME}.cpp)
-	if(EXISTS ${EXAMPLE_FOLDER}/main.cpp)
-		SET(MAIN_CPP ${EXAMPLE_FOLDER}/main.cpp)
-	ENDIF()
-	if(EXISTS ${EXAMPLE_FOLDER}/${EXAMPLE_NAME}.h)
-		SET(MAIN_HEADER ${EXAMPLE_FOLDER}/${EXAMPLE_NAME}.h)
-	ENDIF()
+
 	# imgui example requires additional source files
 	IF(${EXAMPLE_NAME} STREQUAL "imgui")
 		file(GLOB ADD_SOURCE "../external/imgui/*.cpp")
 		SET(SOURCE ${SOURCE} ${ADD_SOURCE})
 	ENDIF()
-	# wayland requires additional source files
-	IF(USE_WAYLAND_WSI)
-		SET(SOURCE ${SOURCE} ${CMAKE_BINARY_DIR}/xdg-shell-client-protocol.h ${CMAKE_BINARY_DIR}/xdg-shell-protocol.c)
-	ENDIF()
+	
 	# Add shaders
 	set(SHADER_DIR_GLSL "../shaders/glsl/${EXAMPLE_NAME}")
-	file(GLOB SHADERS_GLSL "${SHADER_DIR_GLSL}/*.vert" "${SHADER_DIR_GLSL}/*.frag" "${SHADER_DIR_GLSL}/*.comp" "${SHADER_DIR_GLSL}/*.geom" "${SHADER_DIR_GLSL}/*.tesc" "${SHADER_DIR_GLSL}/*.tese" "${SHADER_DIR_GLSL}/*.mesh" "${SHADER_DIR_GLSL}/*.task" "${SHADER_DIR_GLSL}/*.rgen" "${SHADER_DIR_GLSL}/*.rchit" "${SHADER_DIR_GLSL}/*.rmiss" "${SHADER_DIR_GLSL}/*.rcall" "${SHADER_DIR_GLSL}/*.rahit" "${SHADER_DIR_GLSL}/*.rint" "${SHADER_DIR_GLSL}/*.glsl")
+	file(GLOB SHADERS_GLSL "${SHADER_DIR_GLSL}/*.vert" "${SHADER_DIR_GLSL}/*.frag" "${SHADER_DIR_GLSL}/*.comp" "${SHADER_DIR_GLSL}/*.mesh" "${SHADER_DIR_GLSL}/*.glsl")
 	source_group("Shaders\\GLSL" FILES ${SHADERS_GLSL})
-	# Add optional readme / tutorial
-	file(GLOB README_FILES "${EXAMPLE_FOLDER}/*.md")
-	add_executable(${EXAMPLE_NAME} WIN32 ${MAIN_CPP} ${SOURCE} ${MAIN_HEADER} ${SHADERS_GLSL} ${README_FILES})
+
+	add_executable(${EXAMPLE_NAME} WIN32 ${MAIN_CPP} ${SOURCE} ${MAIN_HEADER} ${SHADERS_GLSL})
 	target_link_libraries(${EXAMPLE_NAME} base ${Vulkan_LIBRARY} ${WINLIBS})
 
 	file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 	set_target_properties(${EXAMPLE_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-	if(${EXAMPLE_NAME} STREQUAL "texture3d")
-		find_package(OpenMP)
-		if(OpenMP_CXX_FOUND)
-			set_target_properties(${EXAMPLE_NAME} PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-			target_include_directories(${EXAMPLE_NAME} PRIVATE ${OpenMP_CXX_INCLUDE_DIRS})
-			target_link_libraries(${EXAMPLE_NAME} ${OpenMP_CXX_LIBRARIES})
-		endif()
-	endif()
 
 	if(RESOURCE_INSTALL_DIR)
 		install(TARGETS ${EXAMPLE_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})

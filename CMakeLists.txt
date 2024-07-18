@@ -16,27 +16,15 @@ include_directories(external/ktx/include)
 include_directories(external/ktx/other_include)
 include_directories(base)
 
-OPTION(USE_D2D_WSI "Build the project using Direct to Display swapchain" OFF)
-OPTION(USE_DIRECTFB_WSI "Build the project using DirectFB swapchain" OFF)
-OPTION(USE_HEADLESS "Build the project using headless extension swapchain" OFF)
 OPTION(USE_RELATIVE_ASSET_PATH "Load assets (shaders, models, textures) from a fixed path relative to the binar" OFF)
 OPTION(FORCE_VALIDATION "Forces validation on for all samples at compile time (prefer using the -v / --validation command line arguments)" OFF)
 
 set(RESOURCE_INSTALL_DIR "" CACHE PATH "Path to install resources to (leave empty for running uninstalled)")
 
 # Use FindVulkan module added with CMAKE 3.7
-if (NOT CMAKE_VERSION VERSION_LESS 3.7.0)
-	message(STATUS "Using module to find Vulkan")
-	find_package(Vulkan)
-endif()
+message(STATUS "Using module to find Vulkan")
+find_package(Vulkan)
 
-IF (NOT Vulkan_FOUND)
-	find_library(Vulkan_LIBRARY NAMES vulkan-1 vulkan PATHS ${CMAKE_SOURCE_DIR}/libs/vulkan)
-	IF (Vulkan_LIBRARY)
-		set(Vulkan_FOUND ON)
-		MESSAGE("Using bundled Vulkan library version")
-	ENDIF()
-ENDIF()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVK_USE_PLATFORM_WIN32_KHR")
 
 IF (NOT Vulkan_FOUND)
