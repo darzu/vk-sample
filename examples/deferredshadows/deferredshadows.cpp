@@ -115,12 +115,9 @@ public:
 	{
 		title = "Deferred shading with shadows";
 		camera.type = Camera::CameraType::firstperson;
-#if defined(__ANDROID__)
-		camera.movementSpeed = 2.5f;
-#else
+
 		camera.movementSpeed = 5.0f;
 		camera.rotationSpeed = 0.25f;
-#endif
 		camera.position = { 2.15f, 0.3f, -8.75f };
 		camera.setRotation(glm::vec3(-0.75f, 12.5f, 0.0f));
 		camera.setPerspective(60.0f, (float)width / (float)height, zNear, zFar);
@@ -228,14 +225,8 @@ public:
 	{
 		frameBuffers.deferred = new vks::Framebuffer(vulkanDevice);
 
-#if defined(__ANDROID__)
-		// Use max. screen dimension as deferred framebuffer size
-		frameBuffers.deferred->width = std::max(width, height);
-		frameBuffers.deferred->height = std::max(width, height);
-#else
 		frameBuffers.deferred->width = 2048;
 		frameBuffers.deferred->height = 2048;
-#endif
 
 		// Four attachments (3 color, 1 depth)
 		vks::AttachmentCreateInfo attachmentInfo = {};

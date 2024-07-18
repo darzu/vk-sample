@@ -8,13 +8,10 @@
 
 #include "VulkanTools.h"
 
-#if !(defined(VK_USE_PLATFORM_IOS_MVK) || defined(VK_USE_PLATFORM_MACOS_MVK) || defined(VK_USE_PLATFORM_METAL_EXT))
 // iOS & macOS: getAssetPath() and getShaderBasePath() implemented externally for access to Obj-C++ path utilities
 const std::string getAssetPath()
 {
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-	return "";
-#elif defined(VK_EXAMPLE_ASSETS_DIR)
+#if defined(VK_EXAMPLE_ASSETS_DIR)
 	return VK_EXAMPLE_ASSETS_DIR;
 #else
 	return "./../assets/";
@@ -23,15 +20,12 @@ const std::string getAssetPath()
 
 const std::string getShaderBasePath()
 {
-#if defined(VK_USE_PLATFORM_ANDROID_KHR)
-	return "shaders/";
-#elif defined(VK_EXAMPLE_SHADERS_DIR)
+#if defined(VK_EXAMPLE_SHADERS_DIR)
 	return VK_EXAMPLE_SHADERS_DIR;
 #else
 	return "./../shaders/";
 #endif
 }
-#endif
 
 namespace vks
 {
@@ -339,18 +333,12 @@ namespace vks
 
 		void exitFatal(const std::string& message, int32_t exitCode)
 		{
-#if defined(_WIN32)
 			if (!errorModeSilent) {
 				MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONERROR);
 			}
-#elif defined(__ANDROID__)
-            LOGE("Fatal error: %s", message.c_str());
-			vks::android::showAlert(message.c_str());
-#endif
+
 			std::cerr << message << "\n";
-#if !defined(__ANDROID__)
 			exit(exitCode);
-#endif
 		}
 
 		void exitFatal(const std::string& message, VkResult resultCode)
@@ -358,36 +346,6 @@ namespace vks
 			exitFatal(message, (int32_t)resultCode);
 		}
 
-#if defined(__ANDROID__)
-		// Android shaders are stored as assets in the apk
-		// So they need to be loaded via the asset manager
-		VkShaderModule loadShader(AAssetManager* assetManager, const char *fileName, VkDevice device)
-		{
-			// Load shader from compressed asset
-			AAsset* asset = AAssetManager_open(assetManager, fileName, AASSET_MODE_STREAMING);
-			assert(asset);
-			size_t size = AAsset_getLength(asset);
-			assert(size > 0);
-
-			char *shaderCode = new char[size];
-			AAsset_read(asset, shaderCode, size);
-			AAsset_close(asset);
-
-			VkShaderModule shaderModule;
-			VkShaderModuleCreateInfo moduleCreateInfo;
-			moduleCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleCreateInfo.pNext = NULL;
-			moduleCreateInfo.codeSize = size;
-			moduleCreateInfo.pCode = (uint32_t*)shaderCode;
-			moduleCreateInfo.flags = 0;
-
-			VK_CHECK_RESULT(vkCreateShaderModule(device, &moduleCreateInfo, NULL, &shaderModule));
-
-			delete[] shaderCode;
-
-			return shaderModule;
-		}
-#else
 		VkShaderModule loadShader(const char *fileName, VkDevice device)
 		{
 			std::ifstream is(fileName, std::ios::binary | std::ios::in | std::ios::ate);
@@ -420,7 +378,6 @@ namespace vks
 				return VK_NULL_HANDLE;
 			}
 		}
-#endif
 
 		bool fileExists(const std::string &filename)
 		{
@@ -438,11 +395,9 @@ namespace vks
 			return (value + alignment - 1) & ~(alignment - 1);
 		}
 
-
 		VkDeviceSize alignedVkSize(VkDeviceSize value, VkDeviceSize alignment)
 		{
 			return (value + alignment - 1) & ~(alignment - 1);
 		}
-
 	}
 }

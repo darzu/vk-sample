@@ -285,24 +285,11 @@ void vkglTF::Texture::fromglTfImage(tinygltf::Image &gltfimage, std::string path
 		ktxTexture* ktxTexture;
 
 		ktxResult result = KTX_SUCCESS;
-#if defined(__ANDROID__)
-		AAsset* asset = AAssetManager_open(androidApp->activity->assetManager, filename.c_str(), AASSET_MODE_STREAMING);
-		if (!asset) {
-			vks::tools::exitFatal("Could not load texture from " + filename + "\n\nMake sure the assets submodule has been checked out and is up-to-date.", -1);
-		}
-		size_t size = AAsset_getLength(asset);
-		assert(size > 0);
-		ktx_uint8_t* textureData = new ktx_uint8_t[size];
-		AAsset_read(asset, textureData, size);
-		AAsset_close(asset);
-		result = ktxTexture_CreateFromMemory(textureData, size, KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-		delete[] textureData;
-#else
+
 		if (!vks::tools::fileExists(filename)) {
 			vks::tools::exitFatal("Could not load texture from " + filename + "\n\nMake sure the assets submodule has been checked out and is up-to-date.", -1);
 		}
 		result = ktxTexture_CreateFromNamedFile(filename.c_str(), KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, &ktxTexture);
-#endif		
 		assert(result == KTX_SUCCESS);
 
 		this->device = device;
@@ -1173,11 +1160,6 @@ void vkglTF::Model::loadFromFile(std::string filename, vks::VulkanDevice *device
 	} else {
 		gltfContext.SetImageLoader(loadImageDataFunc, nullptr);
 	}
-#if defined(__ANDROID__)
-	// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-	// We let tinygltf handle this, by passing the asset manager of our app
-	tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 	size_t pos = filename.find_last_of('/');
 	path = filename.substr(0, pos);
 
@@ -1185,11 +1167,6 @@ void vkglTF::Model::loadFromFile(std::string filename, vks::VulkanDevice *device
 
 	this->device = device;
 
-#if defined(__ANDROID__)
-	// On Android all assets are packed with the apk in a compressed form, so we need to open them using the asset manager
-	// We let tinygltf handle this, by passing the asset manager of our app
-	tinygltf::asset_manager = androidApp->activity->assetManager;
-#endif
 	bool fileLoaded = gltfContext.LoadASCIIFromFile(&gltfModel, &error, &warning, filename);
 
 	std::vector<uint32_t> indexBuffer;

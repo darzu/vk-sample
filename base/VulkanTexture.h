@@ -22,10 +22,6 @@
 #include "VulkanDevice.h"
 #include "VulkanTools.h"
 
-#if defined(__ANDROID__)
-#	include <android/asset_manager.h>
-#endif
-
 namespace vks
 {
 class Texture
